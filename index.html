@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 19th Birthday 🎉</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #1e2f42;
+}
+
+.book {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  perspective: 2000px;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: linear-gradient(135deg, #3c5c7b, #1e2f42);
+  color: white;
+  padding: 20px;
+  transform-origin: left;
+  transition: transform 0.9s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page:nth-child(1) { z-index: 4; }
+.page:nth-child(2) { z-index: 3; }
+.page:nth-child(3) { z-index: 2; }
+.page:nth-child(4) { z-index: 1; }
+
+.flipped {
+  transform: rotateY(-180deg);
+}
+
+/* IMAGE */
+.img-box {
+  height: 80%;
+  width: 100%;
+  max-width: 791px;
+  height: 600px;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* TEXT */
+h1 { font-size: 2rem; margin-bottom: 10px; }
+h2 { font-size: 1.6rem; margin-bottom: 10px; }
+p { font-size: 1.1rem; text-align: center; max-width: 500px; opacity: 0.9; }
+
+/* SWIPE HINT */
+.hint {
+  position: absolute;
+  bottom: 20px;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+/* MUSIC BUTTON */
+.music-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  color: #3c5c7b;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 999;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">🔊</button>
+
+<div class="book" id="book">
+
+  <div class="page">
+    <div class="img-box">
+      <img src="foto1.jpg">
+    </div>
+    <h1>HAPPY BRITHDAY BELA</h1>
+    <p>Another year, another glow. Semoga hidupmu selalu penuh warna, cerita indah, dan hal-hal yang membuatmu tersenyum.</p>
+    <div class="hint">Swipe>>></div>
+  </div>
+
+  <div class="page">
+    <div class="img-box">
+      <img src="foto2.jpg">
+    </div>
+    <h2>SEMANGAT BELAJARNYA YA...</h2>
+    <p>Semoga di usia yang baru ini, kamu makin kuat, makin bahagia, dan makin dekat dengan semua impianmu.</p>
+  </div>
+
+  <div class="page">
+    <div class="img-box">
+      <img src="foto3.jpg">
+    </div>
+    <h2>SELALU KUAT OKAY?</h2>
+    <p>Selamat ulang tahun! Tetap jadi cewek kuat, baik, dan selalu bikin orang di sekitarmu bahagia ya.</p>
+  </div>
+
+  <div class="page">
+    <div class="img-box">
+      <img src="foto4.jpg">
+    </div>
+    <h2>ANOTHER YEAR, ANOTHER CHANCE</h2>
+    <p>semoga semesta mendukung setiap mimpimu hingga jadi nyata.🤍</p>
+  </div>
+
+</div>
+
+<script>
+let pages = document.querySelectorAll(".page");
+let current = 0;
+
+let startX = 0;
+let endX = 0;
+
+const book = document.getElementById("book");
+
+// MUSIC
+const music = document.getElementById("bgm");
+let isPlaying = false;
+
+// autoplay after first touch
+document.body.addEventListener("touchstart", () => {
+  if (!isPlaying) {
+    music.play();
+    isPlaying = true;
+  }
+}, { once: true });
+
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    isPlaying = true;
+    document.querySelector(".music-btn").innerText = "🔊";
+  } else {
+    music.pause();
+    isPlaying = false;
+    document.querySelector(".music-btn").innerText = "🔇";
+  }
+}
+
+// SWIPE
+book.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+});
+
+book.addEventListener("touchend", (e) => {
+  endX = e.changedTouches[0].clientX;
+  handleSwipe();
+});
+
+book.addEventListener("mousedown", (e) => {
+  startX = e.clientX;
+});
+
+book.addEventListener("mouseup", (e) => {
+  endX = e.clientX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  let diff = startX - endX;
+
+  if (diff > 50) {
+    if (current < pages.length) {
+      pages[current].classList.add("flipped");
+      current++;
+    }
+  }
+
+  if (diff < -50) {
+    if (current > 0) {
+      current--;
+      pages[current].classList.remove("flipped");
+    }
+  }
+}
+</script>
+
+</body>
+</html>
